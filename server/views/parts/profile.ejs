@@ -1,0 +1,66 @@
+<div id="page-wrapper">
+    <%
+    if (messages.reason_fail) {
+    %>
+    <div class="alert alert-danger">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <%=messages.reason_fail%>
+    </div>
+    <%}%>
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Profile</h1>
+        </div>
+        
+    </div>
+    <label style="width: 40%">Username: <%=user.username%></label>
+    <a href="#" id="changeUsername">Change</a><br>
+    <form id="formChangeUsername" hidden><br>
+        <div class="form-inline">
+            <span class="col-md-2">New username:</span>
+            <div class="col-md-offset-2">
+                <input type="text" class="form-control"><br><br>
+                <input type="submit" value="Submit" class="btn btn-success">
+                <input type="button" value="Cancel" class="btn btn-default" id="cancelChangeUsername">
+            </div>
+        </div>
+        
+    </form><br>
+    
+    <label style="width: 40%">Email: <%=user.email%></label>
+    <a href="#" id="changeEmail">Change</a><br>
+    <form id="formChangeEmail" hidden><br>
+        <div class="form-inline">
+            <span class="col-md-2">New email:</span>
+            <div class="col-md-offset-2">
+                <input type="text" class="form-control"><br><br>
+                <input type="submit" value="Submit" class="btn btn-success">
+                <input type="button" value="Cancel" class="btn btn-default" id="cancelChangeEmail">
+            </div>
+        </div>
+        
+    </form><br>
+    <a href="#" id="changePassword">Change password</a><br><br>
+    <form id="formChangePassword" hidden>
+        <div class="form-inline">
+            <span class="col-md-3">Old password:</span>
+            <div>
+                <input type="text" class="form-control"><br><br>
+            </div>
+            <span class="col-md-3">New password:</span>
+            <div>
+                <input type="text" class="form-control"><br><br>
+            </div>
+            <span class="col-md-3">Confirm new password:</span>
+            <div>
+                <input type="text" class="form-control"><br><br>
+            </div>
+            <div class="col-md-offset-3">
+                <input type="submit" value="Submit" class="btn btn-success">
+                <input type="button" value="Cancel" class="btn btn-default" id="cancelChangePassword">
+            </div>
+        </div>
+        
+    </form><br>
+</div>
+

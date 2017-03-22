@@ -1,0 +1,40 @@
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Add new book</h1>
+        </div>
+    </div>
+    <form action="add-book" method="post" id="formAddBook">
+        <div class="col-md-6 col-sm-8 col-xs-12">
+            <div class="form-group">
+                <label for="bookName">Name</label>
+                <input type="text" class="form-control" id="bookName" name="name">
+            </div>
+            <div class="form-group">
+                <label for="bookDescription">Description</label>
+                <textarea class="form-control" id="bookDescription" name="description" rows="5"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="category_id">Category</label>
+                <select class="form-control" id="category_id" name="category_id">
+
+                    <% 
+                    for (i = 0; i < categories.length; i++) {
+                    %>
+                    <option value="<%= categories[i].id %>"><%= categories[i].name %></option>
+                    <% } %>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="publicDate">Public date</label>
+                <input type="text" class="datepicker form-control" name="public_date" id="publicDate" readonly>
+                <span class="publicDateNow checkbox help-block">
+                    <input type="checkbox" id="publicDateNow"> Publish now
+                </span>
+            </div>
+            <input type="submit" value="Submit" class="btn btn-success">
+            <a href="book-list" class="btn btn-default">Cancel</a>
+        </div>
+
+    </form>
+</div>

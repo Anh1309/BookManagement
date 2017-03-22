@@ -1,0 +1,87 @@
+<div id="page-wrapper">
+    <% if (messages.success) {
+    %>
+    <div class="alert alert-success">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <%=messages.success%>
+    </div>
+    <%
+    }
+    %>
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Books</h1>
+        </div>
+    </div>
+    <a href="add-book" class="btn btn-lg btn-primary">Add new book</a>
+    <br><br>
+    <div class="form-inline">
+        <div class="form-group">
+            <div class="dropdown" id="selectBook">
+                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" title="Select" style="width: 70px">
+                    <i class="fa fa-square-o" style="margin-right: 10px"></i>  
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="selectBook">
+                    <li><a href="#" id="selectAllBook">Select all</a></li>
+                    <li><a href="#" id="unselectAllBook">Unselect all</a></li>
+                </ul>
+            </div>
+        </div>
+        <button type="button" class="btn btn-default btn-sm" id="deleteBook-button" title="Delete" style="width: 8%" data-toggle="modal"><i class="fa fa-trash-o"></i></button>
+        <div class="modal fade" role="dialog" id="deleteBook-box1">
+            <form method="POST" action="delete-book">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Delete book</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>Do you want to delete these books?</p>
+                            <p>Click on "Yes" to continue, "No" to cancel</p>
+                            <input type="text" id="listBookId" name="listBookId" style="width: 100%" hidden>
+                            <input type="text" id="countBook" name="countBook" hidden>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" id="buttonCancelDeleteBook1" data-dismiss="modal">No</button>
+                            <button type="submit" class="btn btn-primary" id="buttonConfirmDeleteBook">Yes</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal fade" role="dialog" id="deleteBook-box2">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Delete book</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>You have not selected any book</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="refreshButton btn btn-default btn-sm" title="Refresh" style="width: 8%"><i class="fa fa-refresh"></i></button>
+    </div>
+    <br>
+    <table id="bookList" class="tableListBook table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th class="nosort"></th>
+                <th>Name</th>
+                <th>Author</th>
+                <th>Category</th>
+                <th>Public date</th>
+                <th style="width: 45%">Description</th>
+
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>

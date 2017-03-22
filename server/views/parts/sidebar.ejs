@@ -1,0 +1,29 @@
+    <div class="navbar-default sidebar" role="navigation">
+        <div class="sidebar-nav navbar-collapse">
+            <ul class="nav" id="side-menu">
+                <li class="sidebar-search">
+                    <div class="input-group custom-search-form">
+                        <input type="text" class="form-control" placeholder="Search...">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                </li>
+                <li>
+                    <a href="../category/category-list"><i class="fa fa-table fa-fw"></i> Categories</a>
+                </li>
+                <li>
+                    <a href="../book/book-list"><i class="fa fa-book fa-fw"></i> Books</a>
+                </li>
+                <%if (user!=null && user.role==='ADMIN'){%>
+                <li>
+                    <a href="../user/user-list"><i class="fa fa-user fa-fw"></i> Users</a>
+                </li>
+                <%}%>
+
+            </ul>
+        </div>
+    </div>
+</nav>
