@@ -1,0 +1,50 @@
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Book detail</h1>
+        </div>
+    </div>
+    <form action="edit-book" method="post" id="formEditBook">
+        <div class="col-md-6 col-sm-8 col-xs-12">
+            <div class="form-group">
+                <label for="bookNameEdit">Name</label>
+                <input type="text" class="form-control" id="bookNameEdit" name="name" value="<%=book.name%>">
+            </div>
+            <div class="form-group">
+                <label for="bookDescriptionEdit">Description</label>
+                <textarea class="form-control" id="bookDescriptionEdit" name="description" rows="5"><%=book.description%></textarea>
+            </div>
+            <div class="form-group">
+                <label for="category_id_edit">Category</label>
+                <select class="form-control" id="category_id_edit" name="category_id">
+
+                    <% 
+                    for (i = 0; i < categories.length; i++) {
+                    if (categories[i].id === book.category_id) {
+                    %>
+                    <option value="<%= categories[i].id %>" selected="selected"><%= categories[i].name %></option>
+                    <% } else {%>
+                    <option value="<%= categories[i].id %>"><%= categories[i].name %></option>
+                    <%}}%>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="publicDateEdit">Public date</label>
+                <input type="text" class="datepicker form-control" name="public_date" id="publicDateEdit" value="<%=('0' + book.public_date.getDate()).slice(-2)%>/<%=('0' + (book.public_date.getMonth()+1)).slice(-2)%>/<%=book.public_date.getFullYear()%>" readonly>
+                <span class="publicDateNow checkbox help-block" style='margin-left: 5%'>
+                    <input type="checkbox" id="publicDateNowEdit"> Publish now
+                </span>
+            </div>
+            <input type="text" id="bookId" name="bookId" value="<%=book.id%>" hidden>
+            <%
+            if (book.author === user.id) {%>
+            <input type="submit" value="Edit" class="btn btn-success">
+            <a href="book-list" class="btn btn-default">Back to book list</a>
+            <%} else {%>
+            <a href="book-list" class="btn btn-default">Back to book list</a>
+            <%}%>
+        </div>
+
+    </form>
+</div>
+

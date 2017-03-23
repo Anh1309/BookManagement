@@ -35,7 +35,6 @@ function login(req, res, next) {
                 req.flash('reason_fail', 'User not exist. Please check your email.');
                 res.redirect('/auth/login');
             } else {
-                
                 Utils.checkPassword(req.body.password, user.password, function(err, result){
                     if (err) {
                         return res.json(err);
@@ -44,7 +43,6 @@ function login(req, res, next) {
                             req.flash('reason_fail', 'Wrong password. Please check your password.');
                             res.redirect('/auth/login');
                         } else {
-                            console.log(user);
                             req.session.user = user;
                             res.redirect('/auth/profile');
                         }
@@ -106,6 +104,72 @@ function logout(req, res, next) {
     res.redirect('/auth/login');
 }
 
+function changeUsername(req, res, next) {
+    User.findOne({id: req.session.user.id}, function(err, user){
+        if (err) {
+            return res.json(err);
+        } else {
+            user.username = req.body.username;
+            user.save(function(err, updatedUser){
+                if (err) {
+                    return res.json(err);
+                }
+            });
+            req.session.user = user;
+            res.redirect('/auth/profile');
+        }
+    });
+}
+
+function changeEmail(req, res, next) {
+    User.findOne({id: req.session.user.id}, function(err, user){
+        if (err) {
+            return res.json(err);
+        } else {
+            user.email = req.body.email;
+            user.save(function(err, updatedUser){
+                if (err) {
+                    return res.json(err);
+                }
+            });
+            req.session.user = user;
+            res.redirect('/auth/profile');
+        }
+    });
+}
+
+function changePassword(req, res, next) {
+    Utils.checkPassword(req.body.oldPassword, req.session.user.password, function(err, result){
+        if (err) {
+            return res.json(err);
+        } else {
+            if (!result) {
+                req.flash('reason_fail', 'Wrong password');
+                res.redirect('/auth/profile');
+            } else {
+                User.findOne({id: req.session.user.id}, function(err, user){
+                    if (err) {
+                        return res.json(err);
+                    } else {
+                        Utils.saltAndHash(req.body.newPassword, function(err, newPassword){
+                            user.password = newPassword;
+                            user.save(function(err, updatedUser){
+                                if (err) {
+                                    return res.json(err);
+                                } else {
+                                    req.session.user = user;
+                                    res.redirect('/auth/profile');
+                                }
+                            });
+                            
+                        });
+                    }
+                });
+            }
+        }
+    });
+}
+
 module.exports = {
     showRegister: showRegister,
     showLogin: showLogin,
@@ -115,5 +179,8 @@ module.exports = {
     user: user,
     getUserList: getUserList,
     deleteUser: deleteUser,
-    logout: logout
+    logout: logout,
+    changeUsername: changeUsername,
+    changeEmail: changeEmail,
+    changePassword: changePassword
 };

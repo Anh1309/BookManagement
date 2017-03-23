@@ -43,7 +43,6 @@ function getBookList(req, res, next) {
                 if (err) {
                     return res.json(err);
                 } else {
-                    console.log(books);
                     res.json({
                         "recordsTotal": filteredBooks.length,
                         "recordsFiltered": filteredBooks.length,
@@ -94,10 +93,49 @@ function deleteBook(req, res, next) {
     res.redirect('/book/book-list');
 }
 
+function viewBook(req, res, next) {
+    Book.findOne({id: req.query.bookId}, function(err, book) {
+        if (err) {
+            return res.json(err);
+        } else {
+            Category.find({is_active: true}, function(err, categories){
+                if (err) {
+                    return res.json(err);
+                } else {
+                    res.render('pages/book/book-detail', {book: book, categories: categories});
+                }
+            });
+        }
+    });
+}
+
+function editBook(req, res, next) {
+    Book.findOne({id: req.body.bookId}, function(err, book){
+        if (err) {
+            return res.json(err);
+        } else {
+            book.name = req.body.name;
+            book.description = req.body.description;
+            book.category_id = req.body.category_id;
+            book.public_date = req.body.public_date;
+            book.updated_at = new Date();
+            book.save(function(err, updatedBook){
+                if (err) {
+                    return res.json(err);
+                } else {
+                    res.redirect('/book/book-list');
+                }
+            });
+        }
+    });
+}
+
 module.exports = {
     book: book,
     getBookList: getBookList,
     showAddBook: showAddBook,
     addBook: addBook,
-    deleteBook: deleteBook
+    deleteBook: deleteBook,
+    viewBook: viewBook,
+    editBook: editBook
 };

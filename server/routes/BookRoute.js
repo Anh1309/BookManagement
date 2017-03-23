@@ -13,4 +13,8 @@ router.route('/add-book').post(bookController.addBook);
 
 router.route('/delete-book').post(bookController.deleteBook);
 
+router.route('/view-book').get(passport.isLogin, bookController.viewBook);
+
+router.route('/edit-book').post(bookController.editBook);
+
 module.exports = router;

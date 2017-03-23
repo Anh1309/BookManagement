@@ -70,7 +70,7 @@
         <button type="button" class="refreshButton btn btn-default btn-sm" title="Refresh" style="width: 8%"><i class="fa fa-refresh"></i></button>
     </div>
     <br>
-    <table id="bookList" class="tableListBook table table-bordered table-striped">
+    <table id="bookList" class="tableListBook table table-striped">
         <thead>
             <tr>
                 <th class="nosort"></th>
@@ -78,10 +78,13 @@
                 <th>Author</th>
                 <th>Category</th>
                 <th>Public date</th>
-                <th style="width: 45%">Description</th>
+                <th style="width: 40%">Description</th>
 
             </tr>
         </thead>
         <tbody></tbody>
     </table>
+    <form action="view-book" method="get" id="formGetBookId">
+        <input type="text" id="bookId" name="bookId" hidden>
+    </form>
 </div>

@@ -13,4 +13,8 @@ router.route('/add-category').post(categoryController.addCategory);
 
 router.route('/delete-category').post(categoryController.deleteCategory);
 
+router.route('/view-category').get(passport.isLogin, categoryController.viewCategory);
+
+router.route('/edit-category').post(categoryController.editCategory);
+
 module.exports = router;

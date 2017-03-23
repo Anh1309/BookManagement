@@ -15,11 +15,11 @@
     </div>
     <label style="width: 40%">Username: <%=user.username%></label>
     <a href="#" id="changeUsername">Change</a><br>
-    <form id="formChangeUsername" hidden><br>
+    <form id="formChangeUsername" hidden action="change-username" method="post"><br>
         <div class="form-inline">
             <span class="col-md-2">New username:</span>
             <div class="col-md-offset-2">
-                <input type="text" class="form-control"><br><br>
+                <input type="text" class="form-control" id="username" name="username"><br><br>
                 <input type="submit" value="Submit" class="btn btn-success">
                 <input type="button" value="Cancel" class="btn btn-default" id="cancelChangeUsername">
             </div>
@@ -29,11 +29,11 @@
     
     <label style="width: 40%">Email: <%=user.email%></label>
     <a href="#" id="changeEmail">Change</a><br>
-    <form id="formChangeEmail" hidden><br>
+    <form id="formChangeEmail" hidden action="change-email" method="post"><br>
         <div class="form-inline">
             <span class="col-md-2">New email:</span>
             <div class="col-md-offset-2">
-                <input type="text" class="form-control"><br><br>
+                <input type="email" class="form-control" id="email" name="email"><br><br>
                 <input type="submit" value="Submit" class="btn btn-success">
                 <input type="button" value="Cancel" class="btn btn-default" id="cancelChangeEmail">
             </div>
@@ -41,19 +41,19 @@
         
     </form><br>
     <a href="#" id="changePassword">Change password</a><br><br>
-    <form id="formChangePassword" hidden>
+    <form id="formChangePassword" hidden action="change-password" method="post">
         <div class="form-inline">
             <span class="col-md-3">Old password:</span>
             <div>
-                <input type="text" class="form-control"><br><br>
+                <input type="password" class="form-control" id="oldPassword" name="oldPassword"><br><br>
             </div>
             <span class="col-md-3">New password:</span>
             <div>
-                <input type="text" class="form-control"><br><br>
+                <input type="password" class="form-control" id="newPassword" name="newPassword"><br><br>
             </div>
             <span class="col-md-3">Confirm new password:</span>
             <div>
-                <input type="text" class="form-control"><br><br>
+                <input type="password" class="form-control" id="confirmNewPassword" name="confirmNewPassword"><br><br>
             </div>
             <div class="col-md-offset-3">
                 <input type="submit" value="Submit" class="btn btn-success">

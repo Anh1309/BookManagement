@@ -19,7 +19,7 @@ $(function () {
                 'target': 0,
                 'data': 'book.id',
                 render: function (data) {
-                    return '<input type="checkbox" class="checkbox-book" data-id="' + data + '">';
+                    return '<input type="checkbox" class="checkbox-book" name="id[]" data-id="' + data + '">';
                 }
             },
             {'data': 'book.name'},
@@ -33,13 +33,28 @@ $(function () {
                     return (month) + "/" + date.getDate() + "/" + date.getFullYear();
                 }
             },
-            {'data': 'book.description'}
+            {
+                'data': 'book.description',
+                render: function(data) {
+                    if (data === null) return;
+                    else return data;
+                }
+            }
 
         ],
         "aoColumnDefs": [
             {'bSortable': false, 'aTargets': ['nosort']}
         ]
     });
+    
+    $('#bookList').on('click', 'tbody tr', function(evt) {
+        var $cell = $(evt.target).closest('td');
+        var id = $(this).children().children().data('id');
+        if ($cell.index()>0) {
+            $('#bookId').val(id);
+            $('#formGetBookId').submit();
+        }
+    }); 
 
     $('#categoryList').DataTable({
         lengthChange: false,
@@ -67,6 +82,15 @@ $(function () {
         "aoColumnDefs": [
             {'bSortable': false, 'aTargets': ['nosort']}
         ]
+    });
+    
+    $('#categoryList').on('click', 'tbody tr', function(evt){
+        var $cell = $(evt.target).closest('td');
+        var id = $(this).children().children().data('id');
+        if ($cell.index()>0) {
+            $('#categoryId').val(id);
+            $('#formGetCategoryId').submit();
+        }
     });
     
     $('#userList').DataTable({
@@ -99,10 +123,15 @@ $(function () {
         "aoColumnDefs": [
             {'bSortable': false, 'aTargets': ['nosort']}
         ]
-    })
+    });
+    
     $('#publicDateNow').click(function () {
         $('#publicDate').val(getDate());
     });
+    $('#publicDateNowEdit').click(function () {
+        $('#publicDateEdit').val(getDate());
+    });
+    
     var getDate = function () {
         var now = new Date();
         var day = ("0" + now.getDate()).slice(-2);
@@ -370,6 +399,70 @@ $(function () {
         }
     });
     
+    $('#formChangeUsername').validate({
+        rules: {
+            username: {
+                required: true,
+                maxlength: 200
+            }
+        },
+        messages: {
+            username: {
+                required: 'Please enter your new username',
+                maxlength: 'Username must consist of maximum 200 characters'
+            }
+        },
+        errorElement: "em",
+        errorPlacement: function (error, element) {
+            // Add the `help-block` class to the error element
+            error.addClass("help-block");
+
+            if (element.prop("type") === "checkbox") {
+                error.insertAfter(element.parent("label"));
+            } else {
+                error.insertAfter(element);
+            }
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).closest(".form-inline").addClass("has-error").removeClass("has-success");
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).closest(".form-inline").removeClass("has-error");
+        }
+    });
+    
+    $('#formChangeEmail').validate({
+        rules: {
+            email: {
+                required: true,
+                maxlength: 200
+            }
+        },
+        messages: {
+            email: {
+                required: 'Please enter your new email',
+                maxlength: 'Email must consist of maximum 200 characters'
+            }
+        },
+        errorElement: "em",
+        errorPlacement: function (error, element) {
+            // Add the `help-block` class to the error element
+            error.addClass("help-block");
+
+            if (element.prop("type") === "checkbox") {
+                error.insertAfter(element.parent("label"));
+            } else {
+                error.insertAfter(element);
+            }
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).closest(".form-inline").addClass("has-error").removeClass("has-success");
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).closest(".form-inline").removeClass("has-error");
+        }
+    });
+    
     $('#changeUsername').click(function() {
         $('#formChangeUsername').show();
         $('#formChangeEmail').hide();
@@ -404,7 +497,53 @@ $(function () {
     });
     $('#cancelChangePassword').click(function(){
         $('#formChangePassword').hide();
-    })
+    });
+    
+    $('#formChangePassword').validate({
+        rules: {
+            oldPassword: {
+                required: true
+            },
+            newPassword: {
+                required: true,
+                maxlength: 200
+            },
+            confirmNewPassword: {
+                required: true,
+                equalTo: '#newPassword'
+            }
+        },
+        messages: {
+            oldPassword: {
+                required: 'Please enter your old password'
+            },
+            newPassword: {
+                required: 'Please enter your new password',
+                maxlength: 'Password must consist of maximum 200 characters'
+            },
+            confirmNewPassword: {
+                required: 'Please confirm your new password',
+                equalTo: 'Retype-Password must match with password'
+            }
+        },
+        errorElement: "em",
+        errorPlacement: function (error, element) {
+            // Add the `help-block` class to the error element
+            error.addClass("help-block");
+
+            if (element.prop("type") === "checkbox") {
+                error.insertAfter(element.parent("label"));
+            } else {
+                error.insertAfter(element);
+            }
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).closest(".form-inline").addClass("has-error").removeClass("has-success");
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).closest(".form-inline").removeClass("has-error");
+        }
+    });
 
 });
 

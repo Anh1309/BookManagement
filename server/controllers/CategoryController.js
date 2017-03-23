@@ -63,10 +63,42 @@ function deleteCategory(req, res, next) {
     }
     res.redirect('/category/category-list');
 }
+
+function viewCategory(req, res, next) {
+    Category.findOne({id: req.query.categoryId}, function(err, category){
+        if (err) {
+            return res.json(err);
+        } else {
+            console.log(category);
+            res.render('pages/category/category-detail', {category: category});
+        }
+    });
+}
+
+function editCategory(req, res, next) {
+    Category.findOne({id: req.body.categoryId}, function(err, category) {
+        if (err) {
+            return res.json(err);
+        } else {
+            category.name = req.body.name;
+            category.updated_at = new Date();
+            category.save(function(err, updatedCategory) {
+                if (err) {
+                    return res.json(err);
+                } else {
+                    res.redirect('/category/category-list');
+                }
+            });
+        }
+    });
+}
+
 module.exports = {
     category: category,
     getCategoryList: getCategoryList,
     showAddCategory: showAddCategory,
     addCategory: addCategory,
-    deleteCategory: deleteCategory
+    deleteCategory: deleteCategory,
+    viewCategory: viewCategory,
+    editCategory: editCategory
 };
