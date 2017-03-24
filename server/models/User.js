@@ -34,7 +34,9 @@ var UserSchema = new mongoose.Schema({
     is_active: {
         type: Boolean,
         default: true
-    }
+    },
+    resetPasswordToken: String,
+    resetPasswordExpires: Date
 });
 
 module.exports = mongoose.model('User', UserSchema);

@@ -10,7 +10,7 @@ function book(req, res, next) {
 }
 
 function getBookList(req, res, next) {
-    Book.find({}).sort({created_at: -1}).exec(function (err, filteredBooks) {
+    Book.find({}).exec(function (err, filteredBooks) {
         if (err) {
             return res.json({
                 "error": err,

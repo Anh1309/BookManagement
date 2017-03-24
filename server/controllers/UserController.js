@@ -1,6 +1,8 @@
 const path = require('path');
 const User = require('../models/User');
 const Utils = require('../helpers/Utils');
+const async = require('async');
+const crypto = require('crypto');
 
 function showRegister(req, res, next) {
     res.render('pages/auth/register');
@@ -35,19 +37,25 @@ function login(req, res, next) {
                 req.flash('reason_fail', 'User not exist. Please check your email.');
                 res.redirect('/auth/login');
             } else {
-                Utils.checkPassword(req.body.password, user.password, function(err, result){
-                    if (err) {
-                        return res.json(err);
-                    } else {
-                        if (!result) {
-                            req.flash('reason_fail', 'Wrong password. Please check your password.');
-                            res.redirect('/auth/login');
+                if (user.is_active === false) {
+                    req.flash('reason_fail', 'User has been deleted');
+                    res.redirect('/auth/login');
+                } else {
+                    Utils.checkPassword(req.body.password, user.password, function(err, result){
+                        if (err) {
+                            return res.json(err);
                         } else {
-                            req.session.user = user;
-                            res.redirect('/auth/profile');
+                            if (!result) {
+                                req.flash('reason_fail', 'Wrong password. Please check your password.');
+                                res.redirect('/auth/login');
+                            } else {
+                                req.session.user = user;
+                                res.redirect('/auth/profile');
+                            }
                         }
-                    }
-                });
+                    });
+                }
+                
             }
         }
     });
@@ -170,6 +178,105 @@ function changePassword(req, res, next) {
     });
 }
 
+function showForgotPassword(req, res, next) {
+    res.render('pages/auth/forgot-password');
+}
+
+function forgotPassword(req, res, next) {
+    async.waterfall([
+        function(done) {
+            crypto.randomBytes(20, function(err, buf) {
+                var token = buf.toString('hex');
+                done(err, token);
+            });
+        }, function(token, done) {
+            User.findOne({email: req.body.email}, function(err, user) {
+                if (err) {
+                    return res.json(err);
+                } else {
+                    if (!user || !user.is_active) {
+                        req.flash('reason_fail', 'User is not exist');
+                        res.redirect('/auth/forgot-password');
+                    } else {
+                        user.resetPasswordToken = token;
+                        user.resetPasswordExpires = Date.now() + 3600000;
+                        user.save(function(err){
+                            done(err, token, user);
+                        });
+                    }
+                }
+            });
+        }, function(token, user, done) {
+            var mailOptions = {
+                to: user.email,
+                from: '<anhle130994@gmail.com>',
+                subject: 'Password reset',
+                text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+                    'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+                    'http://' + req.headers.host + '/auth/' + token + '\n\n' +
+                    'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+            };
+            Utils.sendNodeMailer(mailOptions, function(err) {
+                if (err) {
+                    return res.json(err);
+                } else {
+                    done(err, 'done');
+                }
+            });
+        }
+    ], function(err) {
+        if (err) {
+            return res.json(err);
+        } else {
+            res.redirect('/auth/forgot-password');
+        }
+    });
+}
+
+function showResetPassword(req, res, next) {
+    User.findOne({resetPasswordToken: req.params.token, resetPasswordExpires: {$gt: Date.now()}}, function(err, user) {
+        if (err) {
+            return res.json(err);
+        } else {
+            if (!user || !user.is_active) {
+                req.flash('error', 'Password reset token is invalid or has expired.');
+                res.redirect('/auth/forgot-password');
+            } else {
+                res.render('pages/auth/reset-password', {token: req.params.token});
+            }
+        }
+    });
+}
+
+function resetPassword(req, res, next) {
+    User.findOne({resetPasswordToken: req.body.token}, function(err, user) {
+        if (err) {
+            return res.json(err);
+        } else {
+            if (!user || !user.is_active) {
+                req.flash('error', 'Password reset token is invalid or has expired.');
+                res.redirect('back');
+            } else {
+                Utils.saltAndHash(req.body.password, function(err, result) {
+                    if (err) {
+                        return res.json(err);
+                    } else {
+                        user.password = result;
+                        user.resetPasswordToken = undefined;
+                        user.resetPasswordExpires = undefined;
+                        user.save(function(err) {
+                            if (err) {
+                                return res.json(err);
+                            }
+                        });
+                        res.redirect('/auth/login');
+                    }
+                });
+            }
+        }
+    });
+}
+
 module.exports = {
     showRegister: showRegister,
     showLogin: showLogin,
@@ -182,5 +289,9 @@ module.exports = {
     logout: logout,
     changeUsername: changeUsername,
     changeEmail: changeEmail,
-    changePassword: changePassword
+    changePassword: changePassword,
+    showForgotPassword: showForgotPassword,
+    forgotPassword: forgotPassword,
+    showResetPassword: showResetPassword,
+    resetPassword: resetPassword
 };

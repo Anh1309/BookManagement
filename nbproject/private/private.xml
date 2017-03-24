@@ -3,13 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/var/www/html/Test/server/routes/AuthRoute.js</file>
-            <file>file:/var/www/html/Test/server/views/parts/profile.ejs</file>
-            <file>file:/var/www/html/Test/server/models/Book.js</file>
+            <file>file:/var/www/html/Test/server/controllers/BookController.js</file>
+            <file>file:/var/www/html/Test/server/routes/IndexRoute.js</file>
             <file>file:/var/www/html/Test/server/controllers/UserController.js</file>
+            <file>file:/var/www/html/Test/server/views/parts/user-list.ejs</file>
             <file>file:/var/www/html/Test/server/views/pages/auth/login.ejs</file>
             <file>file:/var/www/html/Test/public/javascripts/script.js</file>
-            <file>file:/var/www/html/Test/server/routes/UserRoute.js</file>
         </group>
     </open-files>
 </project-private>

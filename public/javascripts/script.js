@@ -7,7 +7,7 @@ $(function () {
         processing: true,
         serverSide: true,
         searching: false,
-//        "scrollX": true,
+        ordering: false,
         "info": false,
         "autoWidth": true,
         ajax: {
@@ -41,9 +41,6 @@ $(function () {
                 }
             }
 
-        ],
-        "aoColumnDefs": [
-            {'bSortable': false, 'aTargets': ['nosort']}
         ]
     });
     
@@ -62,7 +59,7 @@ $(function () {
         processing: true,
         serverSide: true,
         searching: false,
-//        "scrollX": true,
+        ordering: false,
         "info": false,
         "autoWidth": true,
         ajax: {
@@ -78,9 +75,6 @@ $(function () {
             },
             {'data': 'name'}
 
-        ],
-        "aoColumnDefs": [
-            {'bSortable': false, 'aTargets': ['nosort']}
         ]
     });
     
@@ -99,7 +93,7 @@ $(function () {
         processing: true,
         serverSide: true,
         searching: false,
-//        "scrollX": true,
+        ordering: false,
         "info": false,
         "autoWidth": true,
         ajax: {
@@ -119,9 +113,6 @@ $(function () {
             {
                 data: 'email'
             }
-        ],
-        "aoColumnDefs": [
-            {'bSortable': false, 'aTargets': ['nosort']}
         ]
     });
     
@@ -544,6 +535,46 @@ $(function () {
             $(element).closest(".form-inline").removeClass("has-error");
         }
     });
+    
+    $('#formResetPassword').validate({
+        rules: {
+            password: {
+                required: true,
+                maxlength: 200
+            },
+            confirmPassword: {
+                required: true,
+                equalTo: '#password'
+            }
+        },
+        messages: {
+            password: {
+                required: 'Please enter your new password',
+                maxlength: 'Password must consist of maximum 200 characters'
+            },
+            confirmPassword: {
+                required: 'Please confirm your new password',
+                equalTo: 'Retype-Password must match with password'
+            }
+        },
+        errorElement: "em",
+        errorPlacement: function (error, element) {
+            // Add the `help-block` class to the error element
+            error.addClass("help-block");
+
+            if (element.prop("type") === "checkbox") {
+                error.insertAfter(element.parent("label"));
+            } else {
+                error.insertAfter(element);
+            }
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).closest(".form-group").addClass("has-error").removeClass("has-success");
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).closest(".form-group").removeClass("has-error");
+        }
+    })
 
 });
 

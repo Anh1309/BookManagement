@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt-nodejs");
 const uuidV4 = require('uuid/v4');
 const async = require('async');
+const nodemailer = require('nodemailer');
 
 // generate a UUID V4 string base64 encoded and url safe
 function getUUID() {
@@ -52,9 +53,30 @@ function getStringErrors(errors, done) {
             return done(null, result);
     });
 }
+
+function sendNodeMailer(mailOptions, next) {
+    var config = {
+      host: "smtp.gmail.com", // hostname
+      secureConnection: true, // use SSL
+      port: 465, // port for secure SMTP
+      auth: {
+        user: "anhle130994@gmail.com",
+        pass: "!@#anh!@#"
+      }
+    };
+    
+    var transporter = nodemailer.createTransport(config);
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            return next(error);
+        }
+        return next();
+    });
+};
 module.exports = {
     getUUID: getUUID,
     saltAndHash: saltAndHash,
     checkPassword: checkPassword,
-    getStringErrors: getStringErrors
+    getStringErrors: getStringErrors,
+    sendNodeMailer: sendNodeMailer
 };

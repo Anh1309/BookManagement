@@ -17,4 +17,10 @@ router.route('/change-password').post(userController.changePassword);
 
 router.route('/logout').get(userController.logout);
 
+router.route('/forgot-password').get(userController.showForgotPassword);
+router.route('/forgot-password').post(userController.forgotPassword);
+
+router.route('/:token').get(userController.showResetPassword);
+router.route('/reset-password').post(userController.resetPassword);
+
 module.exports = router;
