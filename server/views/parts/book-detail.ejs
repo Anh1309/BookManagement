@@ -31,9 +31,9 @@
             <div class="form-group">
                 <label for="publicDateEdit">Public date</label>
                 <input type="text" class="datepicker form-control" name="public_date" id="publicDateEdit" value="<%=('0' + book.public_date.getDate()).slice(-2)%>/<%=('0' + (book.public_date.getMonth()+1)).slice(-2)%>/<%=book.public_date.getFullYear()%>" readonly>
-                <span class="publicDateNow checkbox help-block" style='margin-left: 5%'>
+                <label class="publicDateNow checkbox help-block" for="publicDateNowEdit" style='margin-left: 5%'>
                     <input type="checkbox" id="publicDateNowEdit"> Publish now
-                </span>
+                </label>
             </div>
             <input type="text" id="bookId" name="bookId" value="<%=book.id%>" hidden>
             <%
