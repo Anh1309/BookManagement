@@ -69,7 +69,6 @@ function viewCategory(req, res, next) {
         if (err) {
             return res.json(err);
         } else {
-            console.log(category);
             res.render('pages/category/category-detail', {category: category});
         }
     });
