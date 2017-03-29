@@ -3,6 +3,8 @@ const User = require('../models/User');
 const Utils = require('../helpers/Utils');
 const async = require('async');
 const crypto = require('crypto');
+const httpStatus = require('http-status');
+const APIError = require('../helpers/APIError');
 
 function showRegister(req, res, next) {
     res.render('pages/auth/register');
@@ -13,9 +15,17 @@ function register(req, res, next) {
     Utils.saltAndHash(newUser.password, function (err, result) {
         newUser.password = result;
         newUser.id = Utils.getUUID();
-        newUser.save(function (err, result) {
-            if (err) {
-                return res.json(err);
+        newUser.save(function (error) {
+            if (error) {
+                return Utils.getStringErrors(error.errors, function(err, message){
+                    if (err) {
+                        return res.json(err);
+                    } else {
+                        var errMessage = new APIError(message, httpStatus.CONFLICT, true);
+                        req.flash('reason_fail', errMessage.message);
+                        res.redirect('/auth/register');
+                    }
+                });
             } else {
                 res.redirect('/auth/login');
             }

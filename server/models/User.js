@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+var uniqueValidator = require('mongoose-unique-validator');
 
 var UserSchema = new mongoose.Schema({
     id: {
@@ -39,4 +40,5 @@ var UserSchema = new mongoose.Schema({
     resetPasswordExpires: Date
 });
 
+UserSchema.plugin(uniqueValidator,  { message: 'Expected {PATH} cannot be duplicated.' });
 module.exports = mongoose.model('User', UserSchema);

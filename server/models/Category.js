@@ -7,7 +7,8 @@ var CategorySchema = new mongoose.Schema({
         unique: true
     },
     name: {
-        type: String
+        type: String,
+        required: true
     },
     created_at: {
         type: Date,

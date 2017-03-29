@@ -29,6 +29,15 @@
                         <div class="panel-heading">
                             <h3 class="panel-title">Please Sign Up</h3>
                         </div>
+                        <% if (messages.reason_fail) {
+                        %>
+                        <div class="alert alert-danger">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <%=messages.reason_fail%>
+                        </div>
+                        <%
+                        }
+                        %>
                         <div class="panel-body">
                             <form action="register" method="post" id="formRegisterUser">
 

@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 const Book = require('../models/Book');
 const Utils = require('../helpers/Utils');
 const Category = require('../models/Category');
