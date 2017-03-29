@@ -4,6 +4,15 @@
             <h1 class="page-header">Add new category</h1>
         </div>
     </div>
+    <% if (messages.reason_fail) {
+    %>
+    <div class="alert alert-danger">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <%=messages.reason_fail%>
+    </div>
+    <%
+    }
+    %>
     <form action="add-category" method="post" id="formAddCategory">
         <div class="col-md-6 col-sm-8 col-xs-12">
             <div class="form-group">
@@ -11,7 +20,7 @@
                 <input type="text" class="form-control" id="categoryName" name="name">
             </div>
             <input type="submit" value="Submit" class="btn btn-success">
-            <a href="book-list" class="btn btn-default">Cancel</a>
+            <a href="category-list" class="btn btn-default">Cancel</a>
         </div>
 
     </form>

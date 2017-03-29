@@ -1,13 +1,15 @@
 const path = require('path');
 const Category = require('../models/Category');
 const Utils = require('../helpers/Utils');
+const APIError = require('../helpers/APIError');
+const httpStatus = require('http-status');
 
 function category(req, res, next) {
     res.render('pages/category/category-list');
 }
 
 function getCategoryList(req, res, next) {
-    Category.find({is_active: true}, function(err, filteredCategories){
+    Category.find({is_active: true}, function (err, filteredCategories) {
         if (err) {
             return res.json({"error": err,
                 "recordsTotal": 0,
@@ -17,7 +19,7 @@ function getCategoryList(req, res, next) {
             var categories = [];
             var start = parseInt(req.body.start);
             var length = parseInt(req.body.length);
-            for (var i = 0; i < start + length && i < filteredCategories.length; i++){
+            for (var i = 0; i < start + length && i < filteredCategories.length; i++) {
                 categories.push(filteredCategories[i]);
             }
             res.json({
@@ -36,9 +38,17 @@ function showAddCategory(req, res, next) {
 function addCategory(req, res, next) {
     var newCategory = new Category(req.body);
     newCategory.id = Utils.getUUID();
-    newCategory.save(function(err, result){
-        if (err) {
-            return res.json(err);
+    newCategory.save(function (error) {
+        if (error) {
+            return Utils.getStringErrors(error.errors, function (err, message) {
+                if (err) {
+                    return res.json(err);
+                } else {
+                    var errMessage = new APIError(message, httpStatus.CONFLICT, true);
+                    req.flash('reason_fail', errMessage.message);
+                    res.redirect('/category/add-category');
+                }
+            });
         } else {
             req.flash('success', 'New category has been added');
             res.redirect('/category/category-list');
@@ -47,13 +57,13 @@ function addCategory(req, res, next) {
 }
 
 function deleteCategory(req, res, next) {
-    for(var i = 0; i < req.body.countCategory; i++) {
-        Category.findOne({id: req.body.listCategoryId.split(';')[i]}).exec(function(err, category) {
+    for (var i = 0; i < req.body.countCategory; i++) {
+        Category.findOne({id: req.body.listCategoryId.split(';')[i]}).exec(function (err, category) {
             if (err) {
                 return next(err);
             } else {
                 category.is_active = false;
-                category.save(function(err, updatedCategory){
+                category.save(function (err, updatedCategory) {
                     if (err) {
                         return res.json(err);
                     }
@@ -65,7 +75,7 @@ function deleteCategory(req, res, next) {
 }
 
 function viewCategory(req, res, next) {
-    Category.findOne({id: req.query.categoryId}, function(err, category){
+    Category.findOne({id: req.query.categoryId}, function (err, category) {
         if (err) {
             return res.json(err);
         } else {
@@ -75,15 +85,24 @@ function viewCategory(req, res, next) {
 }
 
 function editCategory(req, res, next) {
-    Category.findOne({id: req.body.categoryId}, function(err, category) {
+    Category.findOne({id: req.body.categoryId}, function (err, category) {
         if (err) {
             return res.json(err);
         } else {
             category.name = req.body.name;
             category.updated_at = new Date();
-            category.save(function(err, updatedCategory) {
-                if (err) {
-                    return res.json(err);
+            category.save(function (error) {
+                if (error) {
+                    return Utils.getStringErrors(error.errors, function (err, message) {
+                        if (err) {
+                            return res.json(err);
+                        } else {
+                            var errMessage = new APIError(message, httpStatus.CONFLICT, true);
+                            req.flash('reason_fail', errMessage.message);
+                            res.writeHead(303, {Location: req.headers.referer});
+                            res.end();
+                        }
+                    });
                 } else {
                     res.redirect('/category/category-list');
                 }

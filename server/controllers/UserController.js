@@ -128,13 +128,24 @@ function changeUsername(req, res, next) {
             return res.json(err);
         } else {
             user.username = req.body.username;
-            user.save(function(err, updatedUser){
-                if (err) {
-                    return res.json(err);
+            user.save(function(error, updatedUser){
+                if (error) {
+                    return Utils.getStringErrors(error.errors, function(err, message) {
+                        if (err) {
+                            return res.json(err);
+                        } else {
+                            var errMessage = new APIError(message, httpStatus.CONFLICT, true);
+                            req.flash('reason_fail', errMessage.message);
+                            res.redirect('/auth/profile');
+                        }
+                    });
+                } else {
+                    req.session.user = updatedUser;
+                    req.flash('success', 'Username has been changed');
+                    res.redirect('/auth/profile');
                 }
             });
-            req.session.user = user;
-            res.redirect('/auth/profile');
+            
         }
     });
 }
@@ -145,13 +156,24 @@ function changeEmail(req, res, next) {
             return res.json(err);
         } else {
             user.email = req.body.email;
-            user.save(function(err, updatedUser){
-                if (err) {
-                    return res.json(err);
+            user.save(function(error, updatedUser){
+                if (error) {
+                    return Utils.getStringErrors(error.errors, function(err, message) {
+                        if (err) {
+                            return res.json(err);
+                        } else {
+                            var errMessage = new APIError(message, httpStatus.CONFLICT, true);
+                            req.flash('reason_fail', errMessage.message);
+                            res.redirect('/auth/profile');
+                        }
+                    });
+                } else {
+                    req.session.user = updatedUser;
+                    req.flash('success', 'Email has been changed');
+                    res.redirect('/auth/profile');
                 }
             });
-            req.session.user = user;
-            res.redirect('/auth/profile');
+            
         }
     });
 }

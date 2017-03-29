@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+var uniqueValidator = require('mongoose-unique-validator');
 
 var CategorySchema = new mongoose.Schema({
     id: {
@@ -8,7 +9,8 @@ var CategorySchema = new mongoose.Schema({
     },
     name: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     created_at: {
         type: Date,
@@ -22,5 +24,5 @@ var CategorySchema = new mongoose.Schema({
         default: true
     }
 });
-
+CategorySchema.plugin(uniqueValidator,  { message: 'Expected {PATH} cannot be duplicated.' });
 module.exports = mongoose.model('Category', CategorySchema);

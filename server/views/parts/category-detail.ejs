@@ -4,6 +4,15 @@
             <h1 class="page-header">Category detail</h1>
         </div>
     </div>
+    <% if (messages.reason_fail) {
+    %>
+    <div class="alert alert-danger">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <%=messages.reason_fail%>
+    </div>
+    <%
+    }
+    %>
     <form action="edit-category" method="post" id="formEditCategory">
         <div class="col-md-6 col-sm-8 col-xs-12">
             <div class="form-group">
