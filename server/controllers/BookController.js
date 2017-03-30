@@ -21,13 +21,13 @@ function getBookList(req, res, next) {
             });
         } else {
             var books = [];
-            async.forEachSeries(filteredBooks, function(filteredBook, callback){
+            async.forEachSeries(filteredBooks, function (filteredBook, callback) {
                 if (err) {
                     callback(err);
                 } else {
-                    Category.findOne({id: filteredBook.category_id}, function(err, category){
+                    Category.findOne({id: filteredBook.category_id}, function (err, category) {
                         if (category) {
-                            User.findOne({id: filteredBook.author}, function(err, user){
+                            User.findOne({id: filteredBook.author}, function (err, user) {
                                 if (user) {
                                     books.push({book: filteredBook, category: category, user: user});
                                     callback();
@@ -40,7 +40,7 @@ function getBookList(req, res, next) {
                         }
                     });
                 }
-            }, function(err){
+            }, function (err) {
                 if (err) {
                     return res.json(err);
                 } else {
@@ -51,7 +51,7 @@ function getBookList(req, res, next) {
                     });
                 }
             });
-            
+
         }
     });
 }
@@ -71,11 +71,11 @@ function addBook(req, res, next) {
     var newBook = new Book(req.body);
     newBook.id = Utils.getUUID();
     newBook.author = req.session.user.id;
-    newBook.save(function (err, result) {
+    newBook.save(function (err) {
         if (err) {
             return res.json(err);
         } else {
-            
+
             req.flash('success', 'New book has been added');
             res.redirect('/book/book-list');
         }
@@ -84,10 +84,18 @@ function addBook(req, res, next) {
 }
 
 function deleteBook(req, res, next) {
-    for(var i = 0; i < req.body.countBook; i++) {
-        Book.remove({id: req.body.listBookId.split(';')[i]}).exec(function(err) {
+    for (var i = 0; i < req.body.countBook; i++) {
+        Book.findOne({id: req.body.listBookId.split(';')[i]}).exec(function (err, book) {
             if (err) {
                 return next(err);
+            } else {
+                if (req.session.user.role === 'ADMIN' || req.session.user.id === book.author) {
+                    book.remove(function (err) {
+                        if (err) {
+                            return res.json(err);
+                        }
+                    });
+                }
             }
         });
     }
@@ -95,11 +103,11 @@ function deleteBook(req, res, next) {
 }
 
 function viewBook(req, res, next) {
-    Book.findOne({id: req.query.bookId}, function(err, book) {
+    Book.findOne({id: req.query.bookId}, function (err, book) {
         if (err) {
             return res.json(err);
         } else {
-            Category.find({is_active: true}, function(err, categories){
+            Category.find({is_active: true}, function (err, categories) {
                 if (err) {
                     return res.json(err);
                 } else {
@@ -111,7 +119,7 @@ function viewBook(req, res, next) {
 }
 
 function editBook(req, res, next) {
-    Book.findOne({id: req.body.bookId}, function(err, book){
+    Book.findOne({id: req.body.bookId}, function (err, book) {
         if (err) {
             return res.json(err);
         } else {
@@ -120,7 +128,7 @@ function editBook(req, res, next) {
             book.category_id = req.body.category_id;
             book.public_date = req.body.public_date;
             book.updated_at = new Date();
-            book.save(function(err, updatedBook){
+            book.save(function (err, updatedBook) {
                 if (err) {
                     return res.json(err);
                 } else {

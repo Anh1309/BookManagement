@@ -198,6 +198,7 @@ function changePassword(req, res, next) {
                                     return res.json(err);
                                 } else {
                                     req.session.user = user;
+                                    req.flash('success', 'Password has been changed');
                                     res.redirect('/auth/profile');
                                 }
                             });

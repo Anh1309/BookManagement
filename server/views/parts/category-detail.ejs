@@ -17,9 +17,9 @@
         <div class="col-md-6 col-sm-8 col-xs-12">
             <div class="form-group">
                 <label for="categoryNameEdit">Name</label>
-                <input type="text" class="form-control" id="categoryNameEdit" value="<%=category.name%>" name="name">
+                <input type="text" class="form-control" id="categoryNameEdit" value="<%=name%>" name="name">
             </div>
-            <input type='text' id='categoryIdEdit' name='categoryId' value='<%=category.id%>' hidden>
+            <input type='text' id='categoryIdEdit' name='categoryId' value='<%=id%>' hidden>
             <%
             if (user.role === 'ADMIN') { %>
             <input type="submit" value="Edit" class="btn btn-success">

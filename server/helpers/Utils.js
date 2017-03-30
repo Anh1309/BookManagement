@@ -3,6 +3,11 @@ const uuidV4 = require('uuid/v4');
 const async = require('async');
 const nodemailer = require('nodemailer');
 
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.split(search).join(replacement);
+};
+
 // generate a UUID V4 string base64 encoded and url safe
 function getUUID() {
    const buffer = new Buffer(16);
@@ -54,6 +59,15 @@ function getStringErrors(errors, done) {
     });
 }
 
+function htmlspecialchars_decode(string) {
+    return string
+      .replaceAll("&amp;", '&')
+      .replaceAll("&lt;", '<')
+      .replaceAll("&gt;", '>')
+      .replaceAll("&quot;",'"')
+      .replaceAll("&#039;", "'");
+}
+
 function sendNodeMailer(mailOptions, next) {
     var config = {
       host: "smtp.gmail.com", // hostname
@@ -78,5 +92,6 @@ module.exports = {
     saltAndHash: saltAndHash,
     checkPassword: checkPassword,
     getStringErrors: getStringErrors,
-    sendNodeMailer: sendNodeMailer
+    sendNodeMailer: sendNodeMailer,
+    htmlspecialchars_decode: htmlspecialchars_decode
 };
